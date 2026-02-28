@@ -1,4 +1,4 @@
-import { getSupabase } from '../supabase/client'
+import { supabase } from '../supabase/client'
 import { Database } from '@/types/supabase'
 
 type OrderInsert = Database['public']['Tables']['orders']['Insert']
@@ -6,7 +6,6 @@ type OrderItemInsert = Database['public']['Tables']['order_items']['Insert']
 
 export async function createOrder(order: OrderInsert, items: Omit<OrderItemInsert, 'order_id'>[]) {
     try {
-        const supabase = getSupabase()
         // 1. Create order
         const { data: orderData, error: orderError } = await supabase
             .from('orders')

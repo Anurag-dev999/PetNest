@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getSupabase } from '@/lib/supabase/client'
+import { supabase } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { CheckCircle2, Package, Truck, Home, ArrowRight } from 'lucide-react'
@@ -34,7 +34,7 @@ export default function OrderConfirmationPage() {
   const fetchOrder = async () => {
     try {
       setLoading(true)
-      const { data, error } = await getSupabase()
+      const { data, error } = await supabase
         .from('orders')
         .select(`
           id,

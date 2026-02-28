@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { getSupabase } from '@/lib/supabase/client'
+import { supabase } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Leaf, Eye, EyeOff } from 'lucide-react'
 
@@ -16,7 +16,6 @@ function LoginContent() {
     const [error, setError] = useState<string | null>(null)
     const [successMsg, setSuccessMsg] = useState<string | null>(null)
     const [showPassword, setShowPassword] = useState(false)
-    const supabase = getSupabase()
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault()

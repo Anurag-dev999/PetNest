@@ -1,11 +1,11 @@
-import { getSupabase } from '../supabase/client'
-import { createServerClient } from '../supabase/server'
+import { supabase } from '../supabase/client'
+import { supabase as serverSupabase } from '../supabase/server'
 import { Database } from '@/types/supabase'
 
 export type Product = Database['public']['Tables']['products']['Row']
 
 export async function getProducts(petType?: string, searchTerm?: string, minPrice = 0, maxPrice = 50000) {
-    const serverClient = createServerClient()
+    const serverClient = serverSupabase
     let query = serverClient.from('products').select('*')
 
     if (petType && petType.toLowerCase() !== 'all') {
@@ -29,7 +29,7 @@ export async function getProducts(petType?: string, searchTerm?: string, minPric
 }
 
 export async function getProductById(id: string) {
-    const serverClient = createServerClient()
+    const serverClient = serverSupabase
     const { data, error } = await serverClient.from('products').select('*').eq('id', id).single()
 
     if (error) {
@@ -41,7 +41,7 @@ export async function getProductById(id: string) {
 }
 
 export async function getFeaturedProductsServer(): Promise<Product[]> {
-    const serverClient = createServerClient()
+    const serverClient = serverSupabase
     const { data, error } = await serverClient
         .from('products')
         .select('*')
