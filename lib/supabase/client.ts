@@ -7,7 +7,8 @@ if (!supabaseUrl || !supabaseKey) {
   throw new Error('Missing Supabase environment variables')
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey)
+// @ts-ignore - Avoid circular dependency in typing early declaration
+export const supabase = createClient<Database>(supabaseUrl, supabaseKey)
 
 export type Database = {
   public: {
