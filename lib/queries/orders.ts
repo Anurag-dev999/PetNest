@@ -1,5 +1,5 @@
 import { supabase } from '../supabase/client'
-import { Database } from '../supabase/client'
+import { Database } from '@/types/supabase'
 
 type OrderInsert = Database['public']['Tables']['orders']['Insert']
 type OrderItemInsert = Database['public']['Tables']['order_items']['Insert']
@@ -9,7 +9,7 @@ export async function createOrder(order: OrderInsert, items: Omit<OrderItemInser
         // 1. Create order
         const { data: orderData, error: orderError } = await supabase
             .from('orders')
-            .insert(order)
+            .insert([order])
             .select()
             .single()
 

@@ -13,7 +13,7 @@ interface OrderItem {
   product_id: string
   quantity: number
   price: number
-  products?: { name: string; image_url: string }[] | null
+  products?: { name: string; image_url: string } | { name: string; image_url: string }[] | null
 }
 
 interface Order {

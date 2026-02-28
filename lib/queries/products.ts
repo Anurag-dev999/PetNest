@@ -1,6 +1,6 @@
 import { supabase } from '../supabase/client'
 import { createServerClient } from '../supabase/server'
-import { Database } from '../supabase/client'
+import { Database } from '@/types/supabase'
 
 export type Product = Database['public']['Tables']['products']['Row']
 
