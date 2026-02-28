@@ -22,20 +22,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '**.cloudinary.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'image.pollinations.ai',
-      },
-      // Fallback for any http sources
-      {
-        protocol: 'http',
-        hostname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: '**',
+        hostname: 'images.pexels.com',
       },
     ],
   },
@@ -48,4 +35,3 @@ const nextConfig = {
 }
 
 export default nextConfig
-

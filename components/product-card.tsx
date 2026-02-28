@@ -1,11 +1,11 @@
 'use client'
 
+import { memo, useState, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ShoppingCart, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useCart } from '@/lib/context/cart-context'
-import { useState } from 'react'
 import { formatINR } from '@/lib/utils/currency'
 
 interface ProductCardProps {
@@ -16,11 +16,11 @@ interface ProductCardProps {
   category: string
 }
 
-export function ProductCard({ id, name, price, image_url, category }: ProductCardProps) {
+export const ProductCard = memo(function ProductCard({ id, name, price, image_url, category }: ProductCardProps) {
   const { addItem } = useCart()
   const [added, setAdded] = useState(false)
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
     addItem({
       id,
@@ -31,22 +31,22 @@ export function ProductCard({ id, name, price, image_url, category }: ProductCar
     })
     setAdded(true)
     setTimeout(() => setAdded(false), 2000)
-  }
+  }, [addItem, id, name, price, image_url])
 
   return (
-    <Link href={`/products/${id}`} className="block h-full outline-none">
-      <div className="group h-full border border-border/60 rounded-2xl overflow-hidden hover:shadow-premium hover:-translate-y-1 transition-all duration-300 bg-card flex flex-col cursor-pointer">
+    <Link href={`/products/${id}`} className="block h-full outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-2xl">
+      <div className="group h-full border border-border/60 rounded-2xl overflow-hidden hover:shadow-premium hover:-translate-y-1 transition-all duration-200 bg-card flex flex-col cursor-pointer">
         {/* Image Container */}
         <div className="relative aspect-square overflow-hidden bg-secondary/30">
           <Image
             src={image_url}
             alt={`${name} — product image`}
             fill
+            loading="lazy"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+            className="object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
           />
-          {/* Subtle overlay on hover */}
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-200" />
 
           <div className="absolute top-3 right-3 bg-background/90 backdrop-blur-sm border border-border/50 shadow-sm px-3 py-1.5 rounded-full text-[11px] font-semibold tracking-wide text-foreground uppercase">
             {category}
@@ -55,7 +55,7 @@ export function ProductCard({ id, name, price, image_url, category }: ProductCar
 
         {/* Content */}
         <div className="p-5 flex flex-col flex-1">
-          <h3 className="font-semibold text-base text-card-foreground line-clamp-2 md:line-clamp-1 mb-2 group-hover:text-primary transition-colors leading-snug">
+          <h3 className="font-semibold text-base text-card-foreground line-clamp-2 md:line-clamp-1 mb-2 group-hover:text-primary transition-colors duration-200 leading-snug">
             {name}
           </h3>
 
@@ -81,7 +81,7 @@ export function ProductCard({ id, name, price, image_url, category }: ProductCar
               size="sm"
               onClick={handleAddToCart}
               variant={added ? 'secondary' : 'default'}
-              className={`gap-2 rounded-full px-4 h-9 shadow-sm transition-all active:scale-95 ${added ? 'bg-green-100 text-green-800 hover:bg-green-200 border-transparent' : ''
+              className={`gap-2 rounded-full px-4 h-9 shadow-sm transition-all duration-200 active:scale-95 ${added ? 'bg-green-100 text-green-800 hover:bg-green-200 border-transparent' : ''
                 }`}
               aria-label={added ? `${name} added to cart` : `Add ${name} to cart`}
             >
@@ -93,4 +93,4 @@ export function ProductCard({ id, name, price, image_url, category }: ProductCar
       </div>
     </Link>
   )
-}
+})

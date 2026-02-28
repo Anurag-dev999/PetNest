@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react'
 
 export interface CartItem {
   id: string
@@ -32,8 +32,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (savedCart) {
       try {
         setItems(JSON.parse(savedCart))
-      } catch (error) {
-        console.error('Failed to load cart:', error)
+      } catch {
+        // Silently ignore corrupted cart data
       }
     }
     setIsLoaded(true)
@@ -44,7 +44,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('petnest-cart', JSON.stringify(items))
   }, [items])
 
-  const addItem = (newItem: CartItem) => {
+  const addItem = useCallback((newItem: CartItem) => {
     setItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.id === newItem.id)
       if (existingItem) {
@@ -56,15 +56,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prevItems, newItem]
     })
-  }
+  }, [])
 
-  const removeItem = (id: string) => {
+  const removeItem = useCallback((id: string) => {
     setItems((prevItems) => prevItems.filter((item) => item.id !== id))
-  }
+  }, [])
 
-  const updateQuantity = (id: string, quantity: number) => {
+  const updateQuantity = useCallback((id: string, quantity: number) => {
     if (quantity <= 0) {
-      removeItem(id)
+      setItems((prevItems) => prevItems.filter((item) => item.id !== id))
       return
     }
     setItems((prevItems) =>
@@ -72,26 +72,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         item.id === id ? { ...item, quantity } : item
       )
     )
-  }
+  }, [])
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setItems([])
-  }
+  }, [])
 
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const total = useMemo(
+    () => items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    [items]
+  )
+
+  const value = useMemo(
+    () => ({ items, addItem, removeItem, updateQuantity, clearCart, total, isLoaded }),
+    [items, addItem, removeItem, updateQuantity, clearCart, total, isLoaded]
+  )
 
   return (
-    <CartContext.Provider
-      value={{
-        items,
-        addItem,
-        removeItem,
-        updateQuantity,
-        clearCart,
-        total,
-        isLoaded,
-      }}
-    >
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   )

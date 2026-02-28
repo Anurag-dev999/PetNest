@@ -1,7 +1,9 @@
 import { Leaf, Heart, Truck, Shield } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ProductCard } from '@/components/product-card'
+import { NewsletterForm } from '@/components/newsletter-form'
 import { getFeaturedProductsServer } from '@/lib/queries/products'
 import type { Metadata } from 'next'
 
@@ -14,17 +16,17 @@ export default async function HomePage() {
   const featuredProducts = await getFeaturedProductsServer()
 
   const categories = [
-    { name: 'Dogs', icon: '🐕', color: 'bg-blue-50' },
-    { name: 'Cats', icon: '🐱', color: 'bg-purple-50' },
-    { name: 'Birds', icon: '🦜', color: 'bg-yellow-50' },
-    { name: 'Fish', icon: '🐠', color: 'bg-cyan-50' },
-    { name: 'Small Pets', icon: '🐹', color: 'bg-orange-50' },
+    { name: 'Dogs', image: '/categories/dogs.png', color: 'bg-blue-50' },
+    { name: 'Cats', image: '/categories/cats.png', color: 'bg-purple-50' },
+    { name: 'Birds', image: '/categories/birds.png', color: 'bg-yellow-50' },
+    { name: 'Fish', image: '/categories/fish.png', color: 'bg-cyan-50' },
+    { name: 'Small Pets', image: '/categories/small-pets.png', color: 'bg-orange-50' },
   ]
 
   return (
     <main>
       {/* Hero Section */}
-      <section className="relative py-16 sm:py-24 overflow-hidden">
+      <section className="relative pt-6 pb-16 sm:pt-10 sm:pb-24 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Left Column */}
@@ -57,14 +59,20 @@ export default async function HomePage() {
             </div>
 
             {/* Right Column - Hero Image */}
-            <div className="relative h-[400px] sm:h-[550px] rounded-[2.5rem] overflow-hidden bg-gradient-to-br from-primary/15 via-background to-secondary/30 flex items-center justify-center border border-border/50 shadow-premium">
-              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=2938&auto=format&fit=crop')] bg-cover bg-center opacity-70 mix-blend-overlay"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent"></div>
-              <div className="relative z-10 text-center translate-y-24">
-                <div className="inline-block backdrop-blur-md bg-background/30 p-4 rounded-2xl border border-white/20 shadow-lg mb-4">
-                  <div className="text-6xl drop-shadow-sm">🐾</div>
-                </div>
-                <p className="text-2xl font-bold tracking-tight text-foreground drop-shadow-sm">Happy Pets, Happy Life</p>
+            <div className="relative h-[400px] sm:h-[550px] rounded-[2.5rem] overflow-hidden border border-border/50 shadow-premium">
+              <Image
+                src="/hero-pets.png"
+                alt="Happy golden retriever and orange tabby cat together"
+                fill
+                className="object-cover"
+                priority
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
+              <div className="relative z-10 flex items-end justify-center h-full pb-10">
+                <p className="text-2xl font-bold tracking-tight text-foreground drop-shadow-lg bg-background/40 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20">
+                  Happy Pets, Happy Life
+                </p>
               </div>
             </div>
           </div>
@@ -131,8 +139,16 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
             {categories.map((category) => (
               <Link key={category.name} href={`/products?pet_type=${category.name.toLowerCase()}`} className="group outline-none">
-                <div className={`${category.color} rounded-3xl p-8 text-center hover:shadow-premium border border-transparent hover:border-border/20 hover:-translate-y-1 transition-all duration-300`}>
-                  <div className="text-5xl mb-5 transform transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">{category.icon}</div>
+                <div className={`${category.color} rounded-3xl p-6 text-center hover:shadow-premium border border-transparent hover:border-border/20 hover:-translate-y-1 transition-all duration-300`}>
+                  <div className="relative w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden transform transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">
+                    <Image
+                      src={category.image}
+                      alt={category.name}
+                      fill
+                      className="object-cover"
+                      sizes="80px"
+                    />
+                  </div>
                   <h3 className="font-semibold text-[17px] text-foreground tracking-tight">{category.name}</h3>
                 </div>
               </Link>
@@ -186,14 +202,7 @@ export default async function HomePage() {
             <p className="text-muted-foreground mb-6">
               Subscribe to get exclusive offers and pet care tips delivered to your inbox
             </p>
-            <div className="flex gap-2 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-lg border border-border bg-background text-foreground placeholder-muted-foreground"
-              />
-              <Button>Subscribe</Button>
-            </div>
+            <NewsletterForm />
           </div>
         </div>
       </section>
