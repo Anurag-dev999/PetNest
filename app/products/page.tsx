@@ -2,6 +2,8 @@ import { ProductsGrid } from '@/components/ecommerce/products-grid'
 import { getProducts } from '@/lib/queries/products'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Shop All Products | PetNest',
   description: 'Browse our complete collection of premium pet supplies for dogs, cats, birds, fish, and small pets.',

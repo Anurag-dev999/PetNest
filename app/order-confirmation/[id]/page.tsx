@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase/client'
+import { getSupabase } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { CheckCircle2, Package, Truck, Home, ArrowRight } from 'lucide-react'
@@ -31,14 +31,10 @@ export default function OrderConfirmationPage() {
   const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchOrder()
-  }, [id])
-
   const fetchOrder = async () => {
     try {
       setLoading(true)
-      const { data, error } = await supabase
+      const { data, error } = await getSupabase()
         .from('orders')
         .select(`
           id,
@@ -65,6 +61,10 @@ export default function OrderConfirmationPage() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchOrder()
+  }, [id])
 
   if (loading) {
     return (

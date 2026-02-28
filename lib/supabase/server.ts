@@ -1,10 +1,9 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import { Database } from '@/types/supabase'
 
-export const createServerClient = (): SupabaseClient<Database> => {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder'
-
-  // Without auth context, we use the standard client on the server for public operations
-  return createClient<Database>(supabaseUrl, supabaseKey)
+export function createServerClient(): SupabaseClient<Database> {
+  // Variables are read per-call, not baked at module init time
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  return createClient<Database>(url, key)
 }

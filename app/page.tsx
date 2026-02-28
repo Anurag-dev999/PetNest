@@ -5,6 +5,8 @@ import { ProductCard } from '@/components/product-card'
 import { getFeaturedProductsServer } from '@/lib/queries/products'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'PetNest | Premium Pet Essentials & Supplies India',
   description: 'Your one-stop destination for premium pet food, toys, and supplies. Quality products for dogs, cats, birds, and more. Fast shipping across India.',

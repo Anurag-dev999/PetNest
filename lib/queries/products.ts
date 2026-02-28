@@ -1,4 +1,4 @@
-import { supabase } from '../supabase/client'
+import { getSupabase } from '../supabase/client'
 import { createServerClient } from '../supabase/server'
 import { Database } from '@/types/supabase'
 
