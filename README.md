@@ -224,4 +224,4 @@ netlify deploy --prod
 
 ---
 
-*Built with ❤️ for pet lovers across India 🇮🇳*
+*Built with ❤️ for pet lovers across India By Anurag*
