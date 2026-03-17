@@ -11,6 +11,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { formatINR } from '@/lib/utils/currency'
 
+export const dynamic = 'force-dynamic'
+
 const inputClass =
   'w-full px-4 py-3 border border-border rounded-xl bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow text-sm'
 

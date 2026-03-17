@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button'
 import { Trash2, Plus, Minus, ArrowLeft, ShoppingBag } from 'lucide-react'
 import { formatINR } from '@/lib/utils/currency'
 
+export const dynamic = 'force-dynamic'
+
 export default function CartPage() {
   const { items, removeItem, updateQuantity, total, clearCart, isLoaded } = useCart()
 

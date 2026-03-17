@@ -1,13 +1,15 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase/client'
+import { getSupabaseBrowserClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { CheckCircle2, Package, Truck, Home, ArrowRight } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { formatINR } from '@/lib/utils/currency'
 import Image from 'next/image'
+
+export const dynamic = 'force-dynamic'
 
 interface OrderItem {
   id: string
@@ -35,6 +37,9 @@ export default function OrderConfirmationPage() {
   const fetchOrder = async () => {
     try {
       setLoading(true)
+      const supabase = getSupabaseBrowserClient()
+      if (!supabase) return
+
       const { data, error } = await supabase
         .from('orders')
         .select(`

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { ImageLightbox } from '@/components/ui/image-lightbox'
 import { Star, Heart, Share2, Truck, Shield, RotateCcw, Minus, Plus, ShoppingCart, ArrowLeft } from 'lucide-react'
 import { formatINR } from '@/lib/utils/currency'
-import type { Product } from '@/lib/queries/products'
+import type { Product } from '@/types/product'
 
 interface ProductDetailClientProps {
     product: Product

@@ -1,14 +1,19 @@
 'use client'
 
-import { Suspense, useState } from 'react'
+import { Suspense, useState, useMemo } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { supabase } from '@/lib/supabase/client'
+import { getSupabaseBrowserClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Leaf, Eye, EyeOff } from 'lucide-react'
+
+export const dynamic = 'force-dynamic'
 
 function LoginContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
+    
+    // Use a memoized client to avoid recreation on every render
+    const supabase = useMemo(() => getSupabaseBrowserClient(), [])
     const [isLogin, setIsLogin] = useState(true)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -23,6 +28,10 @@ function LoginContent() {
         setError(null)
 
         try {
+            if (!supabase) {
+                throw new Error('Supabase client failed to initialize.')
+            }
+
             if (isLogin) {
                 const { error } = await supabase.auth.signInWithPassword({
                     email,

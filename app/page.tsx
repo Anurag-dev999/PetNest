@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   description: 'Your one-stop destination for premium pet food, toys, and supplies. Quality products for dogs, cats, birds, and more. Fast shipping across India.',
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function HomePage() {
   const featuredProducts = await getFeaturedProductsServer()
 

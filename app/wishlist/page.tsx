@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button'
 import { Trash2, Heart, ArrowLeft, ShoppingCart } from 'lucide-react'
 import { formatINR } from '@/lib/utils/currency'
 
+export const dynamic = 'force-dynamic'
+
 export default function WishlistPage() {
   const { items, removeItem, clearWishlist, isLoaded } = useWishlist()
   const { addItem: addToCart } = useCart()

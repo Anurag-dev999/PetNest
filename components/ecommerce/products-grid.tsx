@@ -5,7 +5,7 @@ import { ProductCard } from '@/components/product-card'
 import { Button } from '@/components/ui/button'
 import { Search, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Product } from '@/lib/queries/products'
+import type { Product } from '@/types/product'
 import { formatINR } from '@/lib/utils/currency'
 
 interface ProductsGridProps {

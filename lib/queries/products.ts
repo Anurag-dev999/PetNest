@@ -1,7 +1,7 @@
-import { createClient } from '../supabase/server'
+import { getSupabaseServerClient } from '../supabase/server'
 import { Database } from '@/types/supabase'
-
-export type Product = Database['public']['Tables']['products']['Row']
+export type { Product } from '@/types/product'
+import { Product } from '@/types/product'
 
 /**
  * Fetches products from the database with optional filtering and search.
@@ -18,7 +18,8 @@ export async function getProducts(
   maxPrice = 50000
 ): Promise<Product[]> {
   try {
-    const serverClient = await createClient()
+    const serverClient = await getSupabaseServerClient()
+    if (!serverClient) return []
     let query = serverClient.from('products').select('*')
 
     // Apply pet type filter if provided and not "all"
@@ -57,7 +58,8 @@ export async function getProducts(
  */
 export async function getProductById(id: string): Promise<Product | null> {
   try {
-    const serverClient = await createClient()
+    const serverClient = await getSupabaseServerClient()
+    if (!serverClient) return null
     const { data, error } = await serverClient
       .from('products')
       .select('*')
@@ -82,7 +84,8 @@ export async function getProductById(id: string): Promise<Product | null> {
  */
 export async function getFeaturedProductsServer(limit = 8): Promise<Product[]> {
   try {
-    const serverClient = await createClient()
+    const serverClient = await getSupabaseServerClient()
+    if (!serverClient) return []
     const { data, error } = await serverClient
       .from('products')
       .select('*')
@@ -106,7 +109,8 @@ export async function getFeaturedProductsServer(limit = 8): Promise<Product[]> {
  */
 export async function getCategoryCounts(): Promise<Record<string, number>> {
   try {
-    const serverClient = await createClient()
+    const serverClient = await getSupabaseServerClient()
+    if (!serverClient) return {}
     const { data, error } = await serverClient.from('products').select('pet_type')
 
     if (error) {
@@ -114,7 +118,7 @@ export async function getCategoryCounts(): Promise<Record<string, number>> {
     }
 
     const counts: Record<string, number> = {}
-    data.forEach((item) => {
+    data.forEach((item: { pet_type: string | null }) => {
       if (!item.pet_type) return
       const type = item.pet_type.toLowerCase()
       counts[type] = (counts[type] || 0) + 1
