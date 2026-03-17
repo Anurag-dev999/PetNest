@@ -15,8 +15,9 @@ export default function CartPage() {
   if (!isLoaded) return null
 
   const tax = total * 0.18 // GST 18%
-  const grandTotal = total + tax
   const isFreeShipping = total >= 999
+  const shipping = isFreeShipping ? 0 : 99
+  const grandTotal = total + tax + shipping
 
   if (items.length === 0) {
     return (
@@ -156,7 +157,7 @@ export default function CartPage() {
               <div className="flex justify-between mb-6">
                 <span className="font-bold text-lg text-foreground">Total</span>
                 <span className="text-2xl font-bold text-primary">
-                  {formatINR(grandTotal + (isFreeShipping ? 0 : 99))}
+                  {formatINR(grandTotal)}
                 </span>
               </div>
 

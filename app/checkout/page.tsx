@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/lib/context/cart-context'
 import { useAuth } from '@/lib/context/auth-context'
@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { createOrder } from '@/lib/queries/orders'
 import { Lock, ArrowLeft, CreditCard, MapPin, User } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { formatINR } from '@/lib/utils/currency'
 
 const inputClass =
@@ -20,6 +21,8 @@ export default function CheckoutPage() {
   const { items, total, clearCart, isLoaded } = useCart()
   const { user, isLoading: isAuthLoading } = useAuth()
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const emailPrefilled = useRef(false)
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
@@ -38,8 +41,9 @@ export default function CheckoutPage() {
   const grandTotal = total + tax + shipping
 
   useEffect(() => {
-    // Pre-fill email if user is logged in
-    if (user?.email && !formData.email) {
+    // Pre-fill email once when user is available
+    if (user?.email && !emailPrefilled.current) {
+      emailPrefilled.current = true
       setFormData(prev => ({ ...prev, email: user.email! }))
     }
   }, [user])
@@ -82,10 +86,11 @@ export default function CheckoutPage() {
         !formData.state ||
         !formData.pinCode
       ) {
-        alert('Please fill in all required fields')
+        setError('Please fill in all required fields.')
         setLoading(false)
         return
       }
+      setError(null)
 
       const orderItems = items.map((item) => ({
         product_id: item.id,
@@ -111,7 +116,7 @@ export default function CheckoutPage() {
       router.push(`/order-confirmation/${result.orderId}`)
     } catch (error) {
       console.error('Error creating order:', error)
-      alert('Failed to place order. Please try again.')
+      setError('Failed to place order. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -133,7 +138,12 @@ export default function CheckoutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
           {/* Checkout Form — 3 cols */}
           <div className="lg:col-span-3">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <div className="p-4 bg-destructive/10 border border-destructive/20 text-destructive text-sm rounded-xl">
+                  {error}
+                </div>
+              )}
               {/* Contact Information */}
               <div className="bg-card border border-border/60 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-3 mb-5">
@@ -267,8 +277,8 @@ export default function CheckoutPage() {
               <div className="space-y-3 mb-5 pb-5 border-b border-border max-h-52 overflow-y-auto">
                 {items.map((item) => (
                   <div key={item.id} className="flex items-center gap-3 text-sm">
-                    <div className="w-10 h-10 rounded-lg overflow-hidden bg-secondary flex-shrink-0">
-                      <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                    <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-secondary flex-shrink-0">
+                      <Image src={item.image_url} alt={item.name} fill className="object-cover" sizes="40px" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-foreground truncate">{item.name}</p>

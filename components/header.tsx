@@ -1,8 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { ShoppingCart, Leaf, User, LogOut } from 'lucide-react'
+import { ShoppingCart, Leaf, User, LogOut, Heart } from 'lucide-react'
 import { useCart } from '@/lib/context/cart-context'
+import { useWishlist } from '@/lib/context/wishlist-context'
 import { useAuth } from '@/lib/context/auth-context'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,9 +14,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export function Header() {
-  const { items, isLoaded } = useCart()
+  const { items: cartItems, isLoaded: cartLoaded } = useCart()
+  const { items: wishlistItems, isLoaded: wishlistLoaded } = useWishlist()
   const { user, signOut } = useAuth()
-  const cartCount = items.reduce((sum, item) => sum + item.quantity, 0)
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
+  const wishlistCount = wishlistItems.length
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
@@ -68,11 +71,23 @@ export function Header() {
               </Link>
             )}
 
+            {/* Wishlist Button */}
+            <Link href="/wishlist" aria-label={`Wishlist${wishlistCount > 0 ? `, ${wishlistCount} items` : ''}`}>
+              <Button variant="outline" size="sm" className="relative group">
+                <Heart className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                {wishlistLoaded && wishlistCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-[10px] rounded-full min-w-[20px] h-5 px-1 flex items-center justify-center font-bold shadow-sm animate-in zoom-in">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Button>
+            </Link>
+
             {/* Cart Button */}
             <Link href="/cart" aria-label={`Shopping cart${cartCount > 0 ? `, ${cartCount} items` : ''}`}>
               <Button variant="outline" size="sm" className="relative group">
                 <ShoppingCart className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                {isLoaded && cartCount > 0 && (
+                {cartLoaded && cartCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-[10px] rounded-full min-w-[20px] h-5 px-1 flex items-center justify-center font-bold shadow-sm animate-in zoom-in">
                     {cartCount}
                   </span>

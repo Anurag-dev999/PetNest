@@ -16,11 +16,11 @@ export default async function HomePage() {
   const featuredProducts = await getFeaturedProductsServer()
 
   const categories = [
-    { name: 'Dogs', image: '/categories/dogs.png', color: 'bg-blue-50' },
-    { name: 'Cats', image: '/categories/cats.png', color: 'bg-purple-50' },
-    { name: 'Birds', image: '/categories/birds.png', color: 'bg-yellow-50' },
-    { name: 'Fish', image: '/categories/fish.png', color: 'bg-cyan-50' },
-    { name: 'Small Pets', image: '/categories/small-pets.png', color: 'bg-orange-50' },
+    { name: 'Dogs', slug: 'dog', image: '/categories/dogs.png', color: 'bg-blue-50' },
+    { name: 'Cats', slug: 'cat', image: '/categories/cats.png', color: 'bg-purple-50' },
+    { name: 'Birds', slug: 'bird', image: '/categories/birds.png', color: 'bg-yellow-50' },
+    { name: 'Fish', slug: 'fish', image: '/categories/fish.png', color: 'bg-cyan-50' },
+    { name: 'Small Pets', slug: 'small pets', image: '/categories/small-pets.png', color: 'bg-orange-50' },
   ]
 
   return (
@@ -138,7 +138,7 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
             {categories.map((category) => (
-              <Link key={category.name} href={`/products?pet_type=${category.name.toLowerCase()}`} className="group outline-none">
+              <Link key={category.name} href={`/products?pet_type=${category.slug}`} className="group outline-none">
                 <div className={`${category.color} rounded-3xl p-6 text-center hover:shadow-premium border border-transparent hover:border-border/20 hover:-translate-y-1 transition-all duration-300`}>
                   <div className="relative w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden transform transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">
                     <Image

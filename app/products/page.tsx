@@ -1,5 +1,5 @@
 import { ProductsGrid } from '@/components/ecommerce/products-grid'
-import { getProducts } from '@/lib/queries/products'
+import { getProducts, getCategoryCounts } from '@/lib/queries/products'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 export default async function ProductsPage(props: { searchParams: Promise<{ pet_type?: string }> }) {
   const searchParams = await props.searchParams
   const products = await getProducts(searchParams.pet_type)
+  const categoryCounts = await getCategoryCounts()
 
   return (
     <main className="min-h-screen bg-background">
@@ -32,6 +33,7 @@ export default async function ProductsPage(props: { searchParams: Promise<{ pet_
           key={searchParams.pet_type || 'all'}
           initialProducts={products}
           initialCategory={searchParams.pet_type || ''}
+          categoryCounts={categoryCounts}
         />
       </div>
     </main>

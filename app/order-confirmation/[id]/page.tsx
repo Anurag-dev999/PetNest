@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { CheckCircle2, Package, Truck, Home, ArrowRight } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { formatINR } from '@/lib/utils/currency'
+import Image from 'next/image'
 
 interface OrderItem {
   id: string
@@ -159,8 +160,8 @@ export default function OrderConfirmationPage() {
                     className="flex items-center gap-3 p-3 bg-secondary/40 rounded-xl"
                   >
                     {productImage && (
-                      <div className="w-12 h-12 rounded-lg overflow-hidden bg-background flex-shrink-0">
-                        <img src={productImage} alt={productName} className="w-full h-full object-cover" />
+                      <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-background flex-shrink-0">
+                        <Image src={productImage} alt={productName} fill className="object-cover" sizes="48px" />
                       </div>
                     )}
                     <div className="flex-1 min-w-0">

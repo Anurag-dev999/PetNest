@@ -2,12 +2,14 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { CartProvider } from '@/lib/context/cart-context'
+import { WishlistProvider } from '@/lib/context/wishlist-context'
 import { AuthProvider } from '@/lib/context/auth-context'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const geist = Geist({ subsets: ["latin"] });
+const geistMono = Geist_Mono({ subsets: ["latin"] });
+void geistMono // mono font available if needed
 
 export const metadata: Metadata = {
   title: 'PetNest | Premium Pet Essentials',
@@ -24,13 +26,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-IN">
-      <body className="font-sans antialiased">
+      <body className={`${geist.className} font-sans antialiased`}>
         <AuthProvider>
-          <CartProvider>
-            <Header />
-            {children}
-            <Footer />
-          </CartProvider>
+          <WishlistProvider>
+            <CartProvider>
+              <Header />
+              {children}
+              <Footer />
+            </CartProvider>
+          </WishlistProvider>
         </AuthProvider>
       </body>
     </html>
