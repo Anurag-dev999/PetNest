@@ -6,6 +6,7 @@ import { useCart } from '@/lib/context/cart-context'
 import { useWishlist } from '@/lib/context/wishlist-context'
 import { useAuth } from '@/lib/context/auth-context'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +17,7 @@ import {
 export function Header() {
   const { items: cartItems, isLoaded: cartLoaded } = useCart()
   const { items: wishlistItems, isLoaded: wishlistLoaded } = useWishlist()
-  const { user, signOut } = useAuth()
+  const { user, signOut, isLoading: authLoading } = useAuth()
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0)
   const wishlistCount = wishlistItems.length
 
@@ -45,7 +46,9 @@ export function Header() {
           {/* Actions */}
           <div className="flex items-center gap-3">
             {/* User Auth */}
-            {user ? (
+            {authLoading ? (
+              <Skeleton className="h-9 w-[100px] rounded-full hidden sm:block" />
+            ) : user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="hidden sm:flex items-center gap-2">

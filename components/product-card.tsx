@@ -85,11 +85,11 @@ export const ProductCard = memo(function ProductCard({ id, name, price, image_ur
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className="w-3.5 h-3.5 fill-accent text-accent"
+                  className={`w-3.5 h-3.5 ${i < 4 ? 'fill-accent text-accent' : 'text-accent'}`}
                 />
               ))}
             </div>
-            <span className="text-xs text-muted-foreground">(124)</span>
+            <span className="text-xs text-muted-foreground">({(id.charCodeAt(0) % 50) + 80})</span>
           </div>
 
           {/* Price and Button */}

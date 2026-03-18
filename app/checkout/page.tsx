@@ -33,6 +33,7 @@ export default function CheckoutPage() {
     city: '',
     state: '',
     pinCode: '',
+    phone: '',
     cardNumber: '',
     expiryDate: '',
     cvv: '',
@@ -86,12 +87,28 @@ export default function CheckoutPage() {
         !formData.address ||
         !formData.city ||
         !formData.state ||
-        !formData.pinCode
+        !formData.pinCode ||
+        !formData.phone
       ) {
         setError('Please fill in all required fields.')
         setLoading(false)
         return
       }
+
+      // Basic PIN code validation (India: 6 digits)
+      if (!/^\d{6}$/.test(formData.pinCode)) {
+        setError('Please enter a valid 6-digit PIN code.')
+        setLoading(false)
+        return
+      }
+
+      // Basic Phone validation (India: 10 digits)
+      if (!/^[6-9]\d{9}$/.test(formData.phone)) {
+        setError('Please enter a valid 10-digit mobile number.')
+        setLoading(false)
+        return
+      }
+
       setError(null)
 
       const orderItems = items.map((item) => ({
@@ -194,17 +211,24 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="grid grid-cols-3 gap-4">
-                    <div>
+                    <div className="col-span-2">
                       <label className={labelClass}>City *</label>
                       <input type="text" name="city" value={formData.city} onChange={handleInputChange} className={inputClass} placeholder="Mumbai" required />
                     </div>
                     <div>
                       <label className={labelClass}>State *</label>
-                      <input type="text" name="state" value={formData.state} onChange={handleInputChange} className={inputClass} placeholder="Maharashtra" required />
+                      <input type="text" name="state" value={formData.state} onChange={handleInputChange} className={inputClass} placeholder="MH" required />
                     </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className={labelClass}>PIN Code *</label>
                       <input type="text" name="pinCode" value={formData.pinCode} onChange={handleInputChange} className={inputClass} placeholder="400001" required maxLength={6} />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Mobile Number *</label>
+                      <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className={inputClass} placeholder="9876543210" required maxLength={10} />
                     </div>
                   </div>
                 </div>

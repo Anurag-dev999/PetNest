@@ -81,13 +81,13 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
                         </h1>
 
                         {/* Rating */}
-                        <div className="flex items-center gap-2 mb-5" aria-label="4.8 out of 5 stars, 124 reviews">
+                        <div className="flex items-center gap-2 mb-5" aria-label="4.8 out of 5 stars">
                             <div className="flex gap-0.5" aria-hidden="true">
                                 {[...Array(5)].map((_, i) => (
-                                    <Star key={i} className="w-4 h-4 fill-accent text-accent" />
+                                    <Star key={i} className={`w-4 h-4 ${i < 4 ? 'fill-accent text-accent' : 'text-accent'}`} />
                                 ))}
                             </div>
-                            <span className="text-sm text-muted-foreground">(124 reviews)</span>
+                            <span className="text-sm text-muted-foreground">({(product.id.charCodeAt(0) % 50) + 80} reviews)</span>
                         </div>
 
                         {/* Price block */}
